@@ -1,0 +1,12 @@
+*.pyc
+*.sw?
+
+# C extension
+*.so
+videoplayer/_VideoPlayer.c
+
+# build
+build/
+dist/
+.eggs/
+*.egg-info/
