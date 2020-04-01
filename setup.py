@@ -4,6 +4,7 @@
 # from distutils.core import setup
 # from distutils.extension import Extension
 # from distutils.sysconfig import get_python_lib
+from distutils.command.clean import clean as Clean
 from setuptools import setup
 from setuptools import Extension
 import os
@@ -12,6 +13,30 @@ import sys
 from Cython.Build import cythonize
 # from Cython.Distutils import build_ext
 import pkgconfig
+
+
+class CleanCommand(Clean):
+    """ Remove generated files """
+
+    def run(self):
+        Clean.run(self)
+
+        # remove build_ext inplace generated files
+        for dirpath, dirnames, filenames in os.walk('videoplayer'):
+            for filename in filenames:
+                extension = os.path.splitext(filename)[1]
+                # bin
+                if extension in (".so", ".dll", ".pyc"):
+                    print("Remove", filename)
+                    os.unlink(os.path.join(dirpath, filename))
+                    continue
+
+                # libs
+                if extension in ('.c', '.h'):
+                    pyx_file = str.replace(filename, extension, '.pyx')
+                    if os.path.exists(os.path.join(dirpath, pyx_file)):
+                        print("Remove", filename)
+                        os.unlink(os.path.join(dirpath, filename))
 
 
 def pc_info(pkg):
@@ -135,5 +160,8 @@ setup(
     tests_require=['pytest'],
     extras_require={
         'tests': ['pytest'],
+    },
+    cmdclass={
+        'clean': CleanCommand,
     },
 )
