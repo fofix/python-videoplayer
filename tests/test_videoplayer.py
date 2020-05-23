@@ -6,8 +6,8 @@ import sys
 import unittest
 import urllib
 
-from videoplayer.VideoPlayer import VideoPlayer
-from videoplayer.VideoPlayer import VideoPlayerError
+from videoplayer._VideoPlayer import VideoPlayer
+from videoplayer._VideoPlayer import VideoPlayerError
 
 
 if sys.version_info.major == 3:

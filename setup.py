@@ -114,7 +114,7 @@ ext_sources = [
 
 # extension
 ext = Extension(
-    name='videoplayer.VideoPlayer',
+    name='videoplayer._VideoPlayer',
     sources=ext_sources,
     **combine_info(
         gl_info,
