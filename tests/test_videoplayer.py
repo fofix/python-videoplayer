@@ -20,7 +20,8 @@ class VideoPlayerTest(unittest.TestCase):
     def setUpClass(cls):
         # set urls
         url_ogg = "http://download.blender.org/peach/trailer/trailer_400p.ogg"
-        url_m4v = "http://mirror.cessen.com/blender.org/peach/trailer/trailer_iphone.m4v"
+        #url_m4v = "http://mirror.cessen.com/blender.org/peach/trailer/trailer_iphone.m4v"
+        url_m4v = "http://download.blender.org/peach/trailer/trailer_iphone.m4v"
         # set paths
         dirname = os.path.dirname(__file__)
         filename_ogg = "trailer_bick-buck-bunny_400p.ogg"
