@@ -1,5 +1,5 @@
 /* Frets on Fire X (FoFiX)
- * Copyright (C) 2010 Team FoFiX
+ * Copyright (C) 2010-2020 FoFiX team
  *               2010 John Stumpo
  *
  * This program is free software; you can redistribute it and/or
