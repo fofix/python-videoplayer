@@ -128,7 +128,7 @@ ext = Extension(
 # setup
 setup(
     name='videoplayer',
-    version='1.0',
+    version='1.1.dev0',
     description='VideoPlayer is a C-extension in Python',
     long_description=long_description,
     long_description_content_type='text/markdown',

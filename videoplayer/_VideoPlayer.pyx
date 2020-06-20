@@ -23,7 +23,7 @@
 
 # First a thin wrapper around VideoPlayer from graphics.VideoPlayer.c...
 
-__version__ = "1.0"
+__version__ = "1.1.dev0"
 
 cdef extern from "VideoPlayer.h":
     ctypedef struct CVideoPlayer "VideoPlayer":
