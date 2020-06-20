@@ -17,6 +17,10 @@ You'll need those packages:
 * `libtheora`
 * `libswscale` (part of `ffmpeg`).
 
+You'll also need some python package:
+
+    pip install -r requirements.txt
+
 
 ### Native modules
 
