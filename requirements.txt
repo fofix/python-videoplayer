@@ -1,0 +1,2 @@
+scikit-build>=0.10.0
+cython>=0.29.16
