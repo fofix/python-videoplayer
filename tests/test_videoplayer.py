@@ -4,14 +4,15 @@
 import os
 import sys
 import unittest
-import urllib
 
 from videoplayer._VideoPlayer import VideoPlayer
 from videoplayer._VideoPlayer import VideoPlayerError
 
 
 if sys.version_info.major == 3:
-    urllib = urllib.request
+    import urllib.request as urllib
+else:
+    import urllib
 
 
 class VideoPlayerTest(unittest.TestCase):
