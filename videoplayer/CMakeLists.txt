@@ -12,11 +12,14 @@ add_library(_VideoPlayer MODULE ${_VideoPlayer} VideoPlayer.c)
 target_include_directories(_VideoPlayer
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
     PRIVATE ${GLIB2_INCLUDE_DIRS}
+    PRIVATE ${OGG_INCLUDE_DIRS}         # for osx 10.9
+    PRIVATE ${THEORADEC_INCLUDE_DIRS}   # for osx 10.9
+    PRIVATE ${LIBSWSCALE_INCLUDE_DIRS}  # for osx
 )
 target_link_libraries(_VideoPlayer
-    ${GLIB2_LIBRARIES}
-    ${OGG_LIBRARIES}
-    ${THEORADEC_LIBRARIES}
+    ${GLIB2_LINK_LIBRARIES}
+    ${OGG_LINK_LIBRARIES}
+    ${THEORADEC_LINK_LIBRARIES}
     ${OPENGL_LIBRARIES}
     ${LIBSWSCALE_LIBRARIES}
 )
