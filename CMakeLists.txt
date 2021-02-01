@@ -32,12 +32,29 @@ if (WIN32 AND USE_WIN_DEP)
     message(STATUS "Use downloaded dependencies")
 
     set(DEPENDENCY_FOLDER "${PROJECT_SOURCE_DIR}/win_dep")
-    find_path(GLIB2_INCLUDE_DIRS NAMES glib.h PATHS "${DEPENDENCY_FOLDER}/include/glib-2.0")
-    find_library(GLIB2_LIBRARIES NAMES glib-2.0 PATHS "${DEPENDENCY_FOLDER}/lib")
-    find_library(OGG_LIBRARIES NAMES ogg libogg PATHS "${DEPENDENCY_FOLDER}/lib")
-    find_library(THEORADEC_LIBRARIES NAMES theoradec libtheoradec theora-dec PATHS "${DEPENDENCY_FOLDER}/lib")
+
+    # glib
+    find_path(GLIB2_INCLUDE_DIRS_0 NAMES glib.h PATHS "${DEPENDENCY_FOLDER}/include/glib-2.0")
+    find_path(GLIB2_INCLUDE_DIRS_1 NAMES glibconfig.h PATHS "${DEPENDENCY_FOLDER}/lib/glib-2.0/include")
+    list(APPEND GLIB2_INCLUDE_DIRS ${GLIB2_INCLUDE_DIRS_0})
+    list(APPEND GLIB2_INCLUDE_DIRS ${GLIB2_INCLUDE_DIRS_1})
+    find_library(GLIB2_LINK_LIBRARIES NAMES glib-2.0 PATHS "${DEPENDENCY_FOLDER}/lib")
+    # ogg
+    find_path(OGG_INCLUDE_DIRS NAMES ogg/ogg.h PATHS "${DEPENDENCY_FOLDER}/include/")
+    find_library(OGG_LINK_LIBRARIES NAMES ogg libogg PATHS "${DEPENDENCY_FOLDER}/lib")
+    # theora
+    find_path(THEORADEC_INCLUDE_DIRS NAMES theora/theoradec.h PATHS "${DEPENDENCY_FOLDER}/include")
+    find_library(THEORADEC_LINK_LIBRARIES NAMES theoradec libtheoradec theora-dec PATHS "${DEPENDENCY_FOLDER}/lib")
+    # libswscale
+    find_path(LIBSWSCALE_INCLUDE_DIRS NAMES libswscale/swscale.h PATHS "${DEPENDENCY_FOLDER}/include")
     find_library(LIBSWSCALE_LIBRARIES NAMES swscale libswscale PATHS "${DEPENDENCY_FOLDER}/lib")
+    # opengl
     find_package(OpenGL)
+    # msinttypes
+    find_path(MSINTTYPES_INCLUDE_DIRS_0 NAMES stdint.h PATHS "${DEPENDENCY_FOLDER}/include/msinttypes")
+    find_path(MSINTTYPES_INCLUDE_DIRS_1 NAMES inttypes.h PATHS "${DEPENDENCY_FOLDER}/include/msinttypes")
+    list(APPEND MSINTTYPES_INCLUDE_DIRS ${MSINTTYPES_INCLUDE_DIRS_0})
+    list(APPEND MSINTTYPES_INCLUDE_DIRS ${MSINTTYPES_INCLUDE_DIRS_1})
 
 else()
     message(STATUS "Use pkgconfig")
