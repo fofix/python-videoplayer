@@ -41,6 +41,11 @@ try:
 except ImportError:
     long_description = open(readme_filepath).read()
 
+# Windows
+build_cmake_args = list()
+if os.getenv("WIN_BUILD"):
+    build_cmake_args.append('-DUSE_WIN_DEP=ON')
+
 # setup
 setup(
     name='videoplayer',
@@ -80,4 +85,6 @@ setup(
     cmdclass={
         'clean': CleanCommand,
     },
+    # skbuild options
+    cmake_args=build_cmake_args,
 )
