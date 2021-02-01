@@ -1,0 +1,67 @@
+environment:
+  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+  SDL_AUDIODRIVER: dummy  # handle alsa issues
+  WIN_BUILD: 1
+
+  matrix:
+    - PYTHON: "C:/Python27-x64"
+      PYTHON_DIR: "C:\\Python27-x64"
+      PYTHON_VERSION: "2.7.x"
+      PYTHON_ARCH: "64"
+      MINGW_ARCH: "x86_64"
+      MINGW_DIR: "mingw64"
+
+    - PYTHON: "C:/Python27"
+      PYTHON_DIR: "C:\\Python27"
+      PYTHON_VERSION: "2.7.x"
+      PYTHON_ARCH: "32"
+      MINGW_ARCH: "i686"
+      MINGW_DIR: "mingw32"
+
+init:
+  - cmd: set PATH=%PYTHON_DIR%;%PYTHON_DIR%\Scripts;%PATH%;
+  - cmd: set PATH=%APPVEYOR_BUILD_FOLDER%\win_dep;%PATH%;
+  - ps: |
+      bash -c "mkdir -p win_dep"
+      cd $env:APPVEYOR_BUILD_FOLDER\win_dep
+      wget "http://repo.msys2.org/mingw/${env:MINGW_ARCH}/mingw-w64-${env:MINGW_ARCH}-glib2-2.64.2-1-any.pkg.tar.xz" -OutFile glib2.tar.xz
+      wget "http://repo.msys2.org/mingw/${env:MINGW_ARCH}/mingw-w64-${env:MINGW_ARCH}-libogg-1.3.4-3-any.pkg.tar.xz" -OutFile libogg.tar.xz
+      wget "http://repo.msys2.org/mingw/${env:MINGW_ARCH}/mingw-w64-${env:MINGW_ARCH}-libtheora-1.1.1-4-any.pkg.tar.xz" -OutFile libtheora.tar.xz
+      wget "http://repo.msys2.org/mingw/${env:MINGW_ARCH}/mingw-w64-${env:MINGW_ARCH}-ffmpeg-4.2.2-4-any.pkg.tar.xz" -OutFile ffmpeg.tar.xz
+
+      7z x glib2.tar.xz
+      7z x libogg.tar.xz
+      7z x libtheora.tar.xz
+      7z x ffmpeg.tar.xz
+
+      tar xf glib2.tar
+      tar xf libogg.tar
+      tar xf libtheora.tar
+      tar xf ffmpeg.tar
+
+      Get-ChildItem ${env:MINGW_DIR}\lib\lib*.dll.a | %{
+        $new_name = $_.Name.SubString(3) -replace ".dll.a", ".lib"
+        $new_fullname = Join-Path $_.DirectoryName $new_name
+        Rename-Item $_.FullName $new_fullname
+      }
+
+      xcopy /s /y ${env:MINGW_DIR}\* .
+
+      bash -c "mkdir include/msinttypes"
+      wget https://raw.githubusercontent.com/chemeris/msinttypes/master/stdint.h -OutFile include\msinttypes\stdint.h
+      wget https://raw.githubusercontent.com/chemeris/msinttypes/master/inttypes.h -OutFile include\msinttypes\inttypes.h
+      cd $env:APPVEYOR_BUILD_FOLDER
+
+  - "%PYTHON%\\python.exe -m pip install wheel"
+  - "%PYTHON%\\python.exe -m pip install -U scikit-ci scikit-ci-addons"
+  - "%PYTHON%\\python.exe -m ci_addons --install ../addons"
+  - "%PYTHON%\\python.exe ../addons/appveyor/patch_vs2008.py"
+  - "%PYTHON%\\python.exe -m pip install cython scikit-build cmake ninja"
+
+build_script:
+  - "%PYTHON%\\python.exe setup.py build_ext -f -i"
+  - "%PYTHON%\\python.exe setup.py bdist_wheel"
+
+artifacts:
+  - path: dist\*.whl
+    name: Wheels
