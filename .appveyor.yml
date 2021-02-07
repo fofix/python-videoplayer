@@ -21,6 +21,8 @@ environment:
 init:
   - cmd: set PATH=%PYTHON_DIR%;%PYTHON_DIR%\Scripts;%PATH%;
   - cmd: set PATH=%APPVEYOR_BUILD_FOLDER%\win_dep;%PATH%;
+
+install:
   - ps: |
       bash -c "mkdir -p win_dep"
       cd $env:APPVEYOR_BUILD_FOLDER\win_dep
