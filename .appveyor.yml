@@ -64,6 +64,14 @@ build_script:
   - "%PYTHON%\\python.exe setup.py build_ext -f -i"
   - "%PYTHON%\\python.exe setup.py bdist_wheel"
 
+test_script:
+  - ps: |
+      bash -c "mkdir -p tmp"
+      bash -c "mv tests tmp/"
+      cd tmp
+  - "%PYTHON%\\python.exe -m pip install ../dist/%WHL%"
+  - "%PYTHON%\\python.exe -c \"from videoplayer import _VideoPlayer; print(_VideoPlayer.__version__)\""
+
 artifacts:
   - path: dist\*.whl
     name: Wheels
