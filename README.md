@@ -1,6 +1,7 @@
 # VideoPlayer
 
 [![Build status](https://ci.appveyor.com/api/projects/status/kl6wvf6yuv0b5pjt/branch/master?svg=true)](https://ci.appveyor.com/project/Linkid/python-videoplayer/branch/master)
+[![Tests](https://github.com/fofix/python-videoplayer/actions/workflows/tests.yml/badge.svg?branch=master)](https://github.com/fofix/python-videoplayer/actions/workflows/tests.yml)
 
 
 VideoPlayer is a C-extension in Python to read OGG video files.
