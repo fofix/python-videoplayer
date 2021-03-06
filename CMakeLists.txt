@@ -21,6 +21,7 @@ endif(POLICY CMP0072)
 # manage dependencies
 ## set vars
 set(USE_WIN_DEP OFF CACHE BOOL "Use dependencies from an external package")
+set(USE_VCPKG OFF CACHE BOOL "Use dependencies installed via vcpkg (not dependency package)")
 
 ## find python deps
 find_package(Python REQUIRED)
@@ -55,6 +56,35 @@ if (WIN32 AND USE_WIN_DEP)
     find_path(MSINTTYPES_INCLUDE_DIRS_1 NAMES inttypes.h PATHS "${DEPENDENCY_FOLDER}/include/msinttypes")
     list(APPEND MSINTTYPES_INCLUDE_DIRS ${MSINTTYPES_INCLUDE_DIRS_0})
     list(APPEND MSINTTYPES_INCLUDE_DIRS ${MSINTTYPES_INCLUDE_DIRS_1})
+
+elseif(USE_VCPKG)
+    message(STATUS "[-] Use vcpkg")
+
+    # set vcpkg vars
+    set(VCPKG_CRT_LINKAGE dynamic)
+    set(VCPKG_LIBRARY_LINKAGE dynamic)
+
+    # find deps
+    ## glib
+    find_path(GLIB2_INCLUDE_DIRS NAMES glib.h)
+    find_library(GLIB2_LINK_LIBRARIES glib-2.0)
+    ## ogg
+    find_path(OGG_INCLUDE_DIRS NAMES ogg/ogg.h)
+    find_library(OGG_LINK_LIBRARIES ogg libogg)
+    ## theora
+    find_path(THEORADEC_INCLUDE_DIRS NAMES theora/theoradec.h)
+    find_library(THEORADEC_LINK_LIBRARIES NAMES theoradec libtheoradec theora-dec)
+    ## libswscale
+    find_package(FFMPEG)
+    set(LIBSWSCALE_FOUND ${FFMPEG_libswscale_FOUND})
+    set(LIBSWSCALE_INCLUDE_DIRS ${FFMPEG_libswscale_INCLUDE_DIRS})
+    set(LIBSWSCALE_LIBRARIES ${FFMPEG_libswscale_LIBRARY})
+    ## msinttypes
+    find_path(MSINTTYPES_INCLUDE_DIRS NAMES msinttypes/stdint.h)
+    #find_path(MSINTTYPES_INCLUDE_DIRS "msinttypes/inttypes.h")
+    #find_path(MSINTTYPES_INCLUDE_DIRS NAMES "msinttypes/stdint.h" "msinttypes/inttypes.h")
+    ## opengl
+    find_package(OpenGL)
 
 else()
     message(STATUS "Use pkgconfig")
