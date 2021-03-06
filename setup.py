@@ -7,6 +7,7 @@ try:
 except ImportError:
     from setuptools import setup
 import os
+import sys
 
 
 class CleanCommand(Clean):
@@ -47,6 +48,11 @@ if os.getenv("WIN_BUILD"):
     build_cmake_args.append('-DUSE_WIN_DEP=ON')
 
 # setup
+needs_pytest = {'pytest', 'test', 'ptr'}.intersection(sys.argv)
+pytest_runner = [
+    "pytest-runner<5.3;python_version<'3.3'",
+    "pytest-runner;python_version>'3.3'",
+] if needs_pytest else []
 setup(
     name='videoplayer',
     version='1.1.dev0',
@@ -72,11 +78,7 @@ setup(
     ],
     keywords='ogg',
     #ext_modules=cythonize(ext, compiler_directives={'language_level': sys.version_info[0]}),
-    #setup_requires=['cython', 'pytest-runner', 'cmake'],
-    setup_requires=['pytest-runner', 'cmake'],
-    #install_requires=[
-    #    'Cython >= 0.27',
-    #],
+    setup_requires=['cmake'] + pytest_runner,
     test_suite="tests",
     tests_require=['pytest'],
     extras_require={
