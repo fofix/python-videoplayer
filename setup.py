@@ -46,6 +46,9 @@ except ImportError:
 build_cmake_args = list()
 if os.getenv("WIN_BUILD"):
     build_cmake_args.append('-DUSE_WIN_DEP=ON')
+if os.getenv("VCPKG_BUILD"):
+    build_cmake_args.append('-DUSE_VCPKG=ON')
+    build_cmake_args.append('-DCMAKE_TOOLCHAIN_FILE={}'.format(os.getenv("VCPKG_TOOLCHAIN")))
 
 # setup
 needs_pytest = {'pytest', 'test', 'ptr'}.intersection(sys.argv)
