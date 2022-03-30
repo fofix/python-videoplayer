@@ -6,8 +6,8 @@ try:
     from skbuild import setup
 except ImportError:
     from setuptools import setup
+
 import os
-import sys
 
 
 class CleanCommand(Clean):
@@ -51,11 +51,6 @@ if os.getenv("VCPKG_BUILD"):
     build_cmake_args.append('-DCMAKE_TOOLCHAIN_FILE={}'.format(os.getenv("VCPKG_TOOLCHAIN")))
 
 # setup
-needs_pytest = {'pytest', 'test', 'ptr'}.intersection(sys.argv)
-pytest_runner = [
-    "pytest-runner<5.3;python_version<'3.3'",
-    "pytest-runner;python_version>'3.3'",
-] if needs_pytest else []
 setup(
     name='videoplayer',
     version='1.1.dev0',
@@ -81,9 +76,7 @@ setup(
     ],
     keywords='ogg',
     #ext_modules=cythonize(ext, compiler_directives={'language_level': sys.version_info[0]}),
-    setup_requires=['cmake'] + pytest_runner,
     test_suite="tests",
-    tests_require=['pytest'],
     extras_require={
         'tests': ['pytest'],
     },
