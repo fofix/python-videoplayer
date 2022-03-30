@@ -41,4 +41,4 @@ jobs:
         run: |
           python setup.py build_ext --inplace --force
           python -c "from videoplayer import _VideoPlayer; print(_VideoPlayer.__version__)"
-          python setup.py test
+          pytest .
