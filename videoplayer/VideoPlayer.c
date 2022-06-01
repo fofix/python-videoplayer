@@ -46,7 +46,7 @@ struct _VideoPlayer {
   th_dec_ctx* vdecoder;
   gboolean playing;
   glong playback_position;  /* microseconds */
-  GTimeVal playback_start_time;
+  guint64 playback_start_time;
   GLuint video_texture;
   ogg_int64_t decode_granpos;
   th_ycbcr_buffer frame_buffer;
@@ -282,8 +282,8 @@ void video_player_destroy(VideoPlayer* player)
 
 void video_player_play(VideoPlayer* player)
 {
-  g_get_current_time(&player->playback_start_time);
-  g_time_val_add(&player->playback_start_time, -player->playback_position);
+  player->playback_start_time = g_get_real_time();
+  player->playback_start_time -= 1e-6 * player->playback_position;
   player->playing = TRUE;
 }
 
@@ -298,9 +298,9 @@ gboolean video_player_bind_frame(VideoPlayer* player, GError** err)
 
   /* Advance the playback position if we're playing. */
   if (player->playing) {
-    GTimeVal now;
-    g_get_current_time(&now);
-    if (!video_player_advance(player, (now.tv_sec - player->playback_start_time.tv_sec) + 1e-6 * (now.tv_usec - player->playback_start_time.tv_usec), err))
+    guint64 now;
+    now = g_get_real_time();
+    if (!video_player_advance(player, (now - player->playback_start_time) / G_USEC_PER_SEC, err))
       return FALSE;
   }
 
